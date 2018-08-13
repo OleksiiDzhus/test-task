@@ -1,6 +1,6 @@
 package com.sombra.test.dzhus.authorbook.command;
 
-import com.sombra.test.firsttry.model.enums.Gender;
+import com.sombra.test.dzhus.authorbook.model.enums.Gender;
 import java.util.Date;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
