@@ -29,3 +29,4 @@ public class AuthorBook implements Serializable {
   @JoinColumn(name = "author_id")
   private Author author;
 }
+

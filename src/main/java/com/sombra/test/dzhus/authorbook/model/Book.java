@@ -37,7 +37,7 @@ public class Book {
 
   private BigDecimal rating;
 
-  @OneToMany(mappedBy = "book", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+  @OneToMany(mappedBy = "book", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
   @OnDelete(action = OnDeleteAction.CASCADE)
   private Set<AuthorBook> authorBooks = new HashSet<>();
 

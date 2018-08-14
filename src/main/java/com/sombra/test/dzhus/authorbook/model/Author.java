@@ -39,7 +39,7 @@ public class Author {
 
   private Date born;
 
-  @OneToMany(mappedBy = "author", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+  @OneToMany(mappedBy = "author", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
   private Set<AuthorBook> authorBooks = new HashSet<>();
 
 }
