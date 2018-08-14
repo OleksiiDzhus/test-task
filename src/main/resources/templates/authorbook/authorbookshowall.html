@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8"/>
+  <title>Sombra Test Task</title>
+
+  <link rel="stylesheet"
+        href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+        integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+        crossorigin="anonymous"
+        th:href="@{/webjars/bootstrap/3.3.7-1/css/bootstrap.min.css}">
+
+  <script src="/webjars/jquery/1.11.1/jquery.min.js"></script>
+
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
+          integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+          crossorigin="anonymous"
+          th:src="@{/webjars/bootstrap/3.3.7-1/js/bootstrap.min.js}"></script>
+</head>
+<body>
+<!--/*@thymesVar id="authorsBooks" type="java.util.List"*/-->
+<!--/*@thymesVar id="authorBook" type="com.sombra.test.dzhus.authorbook.model.AuthorBook"*/-->
+<div class="container-fluid" style="margin-top: 20px">
+  <div class="row">
+    <div class="col-md-6 col-md-offset-3">
+      <div class="panel panel-primary">
+
+        <div class="panel-heading">
+          <h1 class="panel-title">Ідентифікатори авторів і пов'язаних книг</h1>
+        </div>
+        <div class="panel-body">
+          <div class="table-responsive" th:if="${not #lists.isEmpty(authorsBooks)}">
+            <table class="table table-hover ">
+              <thead class="thead-inverse">
+              <tr>
+                <th>ID</th>
+                <th>Author_ID</th>
+                <th>View</th>
+                <th>Update</th>
+                <th>Delete</th>
+              </tr>
+              </thead>
+              <tr th:remove="all">
+                <td>123</td>
+                <td>AuthorBook 1</td>
+                <td><a href="#">View</a></td>
+              </tr>
+              <tr th:remove="all">
+                <td>12333</td>
+                <td>AuthorBooks 2</td>
+                <td><a href="#">View</a></td>
+              </tr>
+              <tr th:each="authorBook : ${authorsBooks}">
+                <td th:text="${authorBook.id}">334</td>
+                <td th:text="${authorBook.author.id}">Author 3</td>
+                <td><a href="#" th:href="@{'/authorbook/' + ${authorBook.id} + '/show'}">View</a></td>
+                <td><a href="#" th:href="@{'/authorbook/' + ${authorBook.id} + '/update'}">Update</a></td>
+                <td><a href="#" th:href="@{'/authorbook/' + ${authorBook.id} + '/delete'}">Delete</a></td>
+              </tr>
+            </table>
+          </div>
+        </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
