@@ -1,7 +1,11 @@
 package com.sombra.test.dzhus.authorbook.controller;
 
 import com.sombra.test.dzhus.authorbook.command.AuthorBookCommand;
+import com.sombra.test.dzhus.authorbook.model.Author;
+import com.sombra.test.dzhus.authorbook.model.Book;
 import com.sombra.test.dzhus.authorbook.service.AuthorBookService;
+import com.sombra.test.dzhus.authorbook.service.AuthorService;
+import com.sombra.test.dzhus.authorbook.service.BookService;
 import javax.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,10 +24,16 @@ public class AuthorBookController {
   private static final String AUTHORBOOK_AUTHORBOOKFORM_URL = "authorbook/authorbookform";
 
   private AuthorBookService authorBookService;
+  private AuthorService authorService;
+  private BookService bookService;
 
   @Autowired
-  public AuthorBookController(AuthorBookService authorService) {
-    this.authorBookService = authorService;
+  public AuthorBookController(
+      AuthorBookService authorBookService,
+      AuthorService authorService, BookService bookService) {
+    this.authorBookService = authorBookService;
+    this.authorService = authorService;
+    this.bookService = bookService;
   }
 
   @GetMapping("authorbook/showall")
@@ -35,7 +45,7 @@ public class AuthorBookController {
   }
 
   @GetMapping("authorbook/{id}/show")
-  public String showAuthorById(@PathVariable String id, Model model) {
+  public String showAuthorBookById(@PathVariable String id, Model model) {
 
     model.addAttribute("authorBook", authorBookService.findById(Long.valueOf(id)));
 
@@ -43,7 +53,7 @@ public class AuthorBookController {
   }
 
   @GetMapping("authorbook/new")
-  public String newAuthor(Model model) {
+  public String newAuthorBook(Model model) {
     model.addAttribute("authorBook", new AuthorBookCommand());
 
     return AUTHORBOOK_AUTHORBOOKFORM_URL;
@@ -51,7 +61,7 @@ public class AuthorBookController {
 
 
   @GetMapping("/authorbook/{id}/update")
-  public String updateAuthor(@PathVariable String id, Model model) {
+  public String updateAuthorBook(@PathVariable String id, Model model) {
     model.addAttribute("authorBook", authorBookService.findCommandById(Long.valueOf(id)));
     return AUTHORBOOK_AUTHORBOOKFORM_URL;
   }
@@ -59,6 +69,12 @@ public class AuthorBookController {
   @PostMapping("authorbook")
   public String saveOrUpdate(@Valid @ModelAttribute("authorBook") AuthorBookCommand command,
       BindingResult bindingResult) {
+    Long maxAuthorId = findMaxValidAuthorId();
+    Long maxBookId = findMaxValidBookId();
+
+    if(!commandIsValid(command, maxAuthorId, maxBookId)){
+      return "redirect:/authorbook/invalidinput";
+    }
 
     if (bindingResult.hasErrors()) {
 
@@ -84,4 +100,28 @@ public class AuthorBookController {
   }
 
 
+  //TO DO
+  //Input validation part should be moved to the front-end part
+  private boolean commandIsValid(AuthorBookCommand command, Long maxAuthorId, Long maxBookId){
+     if (command.getAuthorId() == null || command.getBookId() == null)
+       return false;
+     else
+       return command.getAuthorId() <= maxAuthorId && command.getBookId() <= maxBookId;
+  }
+
+  private Long findMaxValidAuthorId(){
+    return authorService.getAuthors()
+        .stream()
+        .map(Author::getId)
+        .max(Long::compareTo)
+        .get();
+  }
+
+  private Long findMaxValidBookId(){
+    return bookService.getBooks()
+        .stream()
+        .map(Book::getId)
+        .max(Long::compareTo)
+        .get();
+  }
 }

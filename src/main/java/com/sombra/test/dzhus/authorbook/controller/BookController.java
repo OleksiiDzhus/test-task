@@ -61,7 +61,7 @@ public class BookController {
     if (bindingResult.hasErrors()) {
 
       bindingResult.getAllErrors().forEach(objectError -> {
-        System.out.println(objectError.toString());
+        log.debug(objectError.toString());
       });
 
       return BOOK_BOOKFORM_URL;
