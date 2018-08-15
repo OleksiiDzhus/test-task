@@ -16,9 +16,26 @@ public class AuthorBookToAuthorBookCommand implements Converter<AuthorBook, Auth
     AuthorBookCommand authorBookCommand = new AuthorBookCommand();
 
     authorBookCommand.setId(authorBook.getId());
-    authorBookCommand.setAuthorId(authorBook.getAuthor().getId());
-    authorBookCommand.setBookId(authorBook.getBook().getId());
+    if (hasNeededInfo(authorBook)) {
+      authorBookCommand.setAuthorId(authorBook.getAuthor().getId());
+      authorBookCommand.setBookId(authorBook.getBook().getId());
+    } else {
+      authorBookCommand.setAuthorId(0L);
+      authorBookCommand.setBookId(0L);
+    }
 
     return authorBookCommand;
+  }
+
+  private boolean hasNeededInfo(AuthorBook authorBook) {
+    return authorIsPresent(authorBook) && bookIsPresent(authorBook);
+  }
+
+  private boolean authorIsPresent(AuthorBook authorBook) {
+    return authorBook.getAuthor() != null;
+  }
+
+  private boolean bookIsPresent(AuthorBook authorBook) {
+    return authorBook.getBook() != null;
   }
 }

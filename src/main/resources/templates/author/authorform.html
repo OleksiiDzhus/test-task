@@ -39,7 +39,7 @@
                   <label>Стать:</label>
                   <select class="form-control" th:field="*{gender}">
                     <option
-                        th:each="genderValue : ${T(com.sombra.test.firsttry.model.enums.Gender).values()}"
+                        th:each="genderValue : ${T(com.sombra.test.dzhus.authorbook.model.enums.Gender).values()}"
                         th:value="${genderValue.name()}"
                         th:text="${genderValue.name()}"
                     >val
