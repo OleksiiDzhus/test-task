@@ -4,6 +4,8 @@ import com.sombra.test.dzhus.authorbook.command.BookCommand;
 import com.sombra.test.dzhus.authorbook.converter.BookCommandToBook;
 import com.sombra.test.dzhus.authorbook.converter.BookToBookCommand;
 import com.sombra.test.dzhus.authorbook.exceptions.NoSuchBookException;
+import com.sombra.test.dzhus.authorbook.model.Author;
+import com.sombra.test.dzhus.authorbook.model.AuthorBook;
 import com.sombra.test.dzhus.authorbook.model.Book;
 import com.sombra.test.dzhus.authorbook.repository.BookRepository;
 import com.sombra.test.dzhus.authorbook.service.BookService;
@@ -11,6 +13,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -76,5 +79,26 @@ public class BookServiceImpl implements BookService {
         .stream()
         .filter(i -> Objects.nonNull(i.getGenre()))
         .collect(Collectors.groupingBy(Book::getGenre, Collectors.counting()));
+  }
+
+  @Override
+  public List<Book> booksWithActiveAuthors() {
+    return bookRepository.findAll()
+        .stream()
+        .map(Book::getAuthorBooks)
+        .flatMap(Set::stream)
+        .filter(i -> authorIsActive(i.getAuthor()))
+        .map(AuthorBook::getAuthor)
+        .map(Author::getAuthorBooks)
+        .flatMap(Set::stream)
+        .map(AuthorBook::getBook)
+        .distinct()
+        .collect(Collectors.toList());
+  }
+
+  private boolean authorIsActive(Author author) {
+    int numberOfWrittenBooks = 1;
+
+    return author.getAuthorBooks().size() > numberOfWrittenBooks;
   }
 }

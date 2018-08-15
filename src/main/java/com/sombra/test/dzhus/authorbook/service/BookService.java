@@ -17,6 +17,8 @@ public interface BookService {
 
   void deleteById(Long idToDelete);
 
-  public Map<String, Long> countBooksByGenre();
+  Map<String, Long> countBooksByGenre();
+
+  List<Book> booksWithActiveAuthors();
 
 }
