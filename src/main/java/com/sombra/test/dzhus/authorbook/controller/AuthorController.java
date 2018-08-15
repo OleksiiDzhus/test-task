@@ -6,6 +6,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import javax.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
+import org.dom4j.rule.Mode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException;
@@ -83,6 +84,13 @@ public class AuthorController {
 
     authorService.deleteById(Long.valueOf(id));
     return "redirect:/";
+  }
+
+  @GetMapping("author/old")
+  public String showOldAuthors(Model model){
+    model.addAttribute("oldAuthors", authorService.findOldAuthors());
+
+    return "author/showoldauthors";
   }
 
   @InitBinder
