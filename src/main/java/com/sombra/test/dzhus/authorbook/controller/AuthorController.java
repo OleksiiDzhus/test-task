@@ -93,6 +93,13 @@ public class AuthorController {
     return "author/showoldauthors";
   }
 
+  @GetMapping("author/mostactive")
+  public String showMostActiveAuthor(Model model){
+    model.addAttribute("mostActive", authorService.findAuthorWithMostBooks());
+
+    return "author/showmostactive";
+  }
+
   @InitBinder
   public void initBinder(WebDataBinder binder) {
     binder.registerCustomEditor(Date.class,
