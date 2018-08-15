@@ -11,6 +11,7 @@ import java.time.LocalDate;
 import java.time.Period;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
@@ -85,6 +86,7 @@ public class AuthorServiceImpl implements AuthorService {
     return getAuthors().stream()
         .filter(i -> Objects.nonNull(i.getBorn()))
         .filter(i -> substractDates(i.getBorn()) > 55)
+        .sorted(Comparator.comparing(Author::getBorn))
         .collect(Collectors.toList());
   }
 
