@@ -3,6 +3,7 @@ package com.sombra.test.dzhus.authorbook.service;
 import com.sombra.test.dzhus.authorbook.command.BookCommand;
 import com.sombra.test.dzhus.authorbook.model.Book;
 import java.util.List;
+import java.util.Map;
 
 public interface BookService {
 
@@ -15,5 +16,7 @@ public interface BookService {
   BookCommand saveBookCommand(BookCommand command);
 
   void deleteById(Long idToDelete);
+
+  public Map<String, Long> countBooksByGenre();
 
 }

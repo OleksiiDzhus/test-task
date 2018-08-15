@@ -81,6 +81,13 @@ public class BookController {
     return "redirect:/";
   }
 
+  @GetMapping("/book/calculate")
+  public String calculateBooksByGenre(Model model){
+    model.addAttribute("numberOfBooksByGenre", bookService.countBooksByGenre());
+
+    return "/book/countbooksbygenre";
+  }
+
   @InitBinder
   public void initBinder(WebDataBinder binder) {
     binder.registerCustomEditor(Date.class,

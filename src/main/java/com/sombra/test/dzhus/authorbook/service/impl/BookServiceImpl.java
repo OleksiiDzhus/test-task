@@ -8,7 +8,10 @@ import com.sombra.test.dzhus.authorbook.model.Book;
 import com.sombra.test.dzhus.authorbook.repository.BookRepository;
 import com.sombra.test.dzhus.authorbook.service.BookService;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -65,5 +68,13 @@ public class BookServiceImpl implements BookService {
   @Override
   public void deleteById(Long idToDelete) {
     bookRepository.deleteById(idToDelete);
+  }
+
+  @Override
+  public Map<String, Long> countBooksByGenre() {
+    return bookRepository.findAll()
+        .stream()
+        .filter(i -> Objects.nonNull(i.getGenre()))
+        .collect(Collectors.groupingBy(Book::getGenre, Collectors.counting()));
   }
 }
