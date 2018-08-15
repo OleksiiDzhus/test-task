@@ -16,4 +16,8 @@ public interface AuthorService {
 
   void deleteById(Long idToDelete);
 
+  List<Author> findOldAuthors();
+
+  Author findAuthorWithMostBooks();
+
 }

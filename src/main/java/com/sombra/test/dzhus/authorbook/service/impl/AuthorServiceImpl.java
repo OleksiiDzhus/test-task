@@ -7,8 +7,15 @@ import com.sombra.test.dzhus.authorbook.exceptions.NoSuchAuthorException;
 import com.sombra.test.dzhus.authorbook.model.Author;
 import com.sombra.test.dzhus.authorbook.repository.AuthorRepository;
 import com.sombra.test.dzhus.authorbook.service.AuthorService;
+import java.time.LocalDate;
+import java.time.Period;
+import java.time.ZoneId;
+import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -68,5 +75,33 @@ public class AuthorServiceImpl implements AuthorService {
   @Override
   public void deleteById(Long idToDelete) {
     authorRepository.deleteById(idToDelete);
+  }
+
+  @Override
+  public List<Author> findOldAuthors() {
+    return getAuthors().stream()
+        .filter(i -> Objects.nonNull(i.getBorn()))
+        .filter(i -> substractDates(i.getBorn()) > 55)
+        .sorted(Comparator.comparing(Author::getBorn))
+        .collect(Collectors.toList());
+  }
+
+  @Override
+  public Author findAuthorWithMostBooks() {
+    List<Author> authorsByNumberOfBooks = authorRepository.findAll()
+        .stream()
+        .sorted(Comparator.comparing(i -> i.getAuthorBooks().size()))
+        .collect(Collectors.toList());
+
+    return authorsByNumberOfBooks.get(authorsByNumberOfBooks.size() - 1);
+  }
+
+  private int substractDates(Date dateToSubstract) {
+    LocalDate now = LocalDate.now();
+    LocalDate dateToSubstractFormatted = dateToSubstract.toInstant()
+        .atZone(ZoneId.systemDefault())
+        .toLocalDate();
+
+    return Period.between(dateToSubstractFormatted, now).getYears();
   }
 }
