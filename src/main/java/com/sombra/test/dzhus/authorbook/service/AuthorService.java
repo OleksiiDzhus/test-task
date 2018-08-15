@@ -18,4 +18,6 @@ public interface AuthorService {
 
   List<Author> findOldAuthors();
 
+  Author findAuthorWithMostBooks();
+
 }

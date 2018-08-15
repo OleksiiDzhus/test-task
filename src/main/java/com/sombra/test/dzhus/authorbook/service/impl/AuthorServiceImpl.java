@@ -10,7 +10,6 @@ import com.sombra.test.dzhus.authorbook.service.AuthorService;
 import java.time.LocalDate;
 import java.time.Period;
 import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
@@ -18,9 +17,6 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
-import org.joda.time.DateTime;
-import org.joda.time.Years;
-import org.joda.time.format.DateTimeFormat;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -90,7 +86,17 @@ public class AuthorServiceImpl implements AuthorService {
         .collect(Collectors.toList());
   }
 
-  private int substractDates(Date dateToSubstract){
+  @Override
+  public Author findAuthorWithMostBooks() {
+    List<Author> authorsByNumberOfBooks = authorRepository.findAll()
+        .stream()
+        .sorted(Comparator.comparing(i -> i.getAuthorBooks().size()))
+        .collect(Collectors.toList());
+
+    return authorsByNumberOfBooks.get(authorsByNumberOfBooks.size() - 1);
+  }
+
+  private int substractDates(Date dateToSubstract) {
     LocalDate now = LocalDate.now();
     LocalDate dateToSubstractFormatted = dateToSubstract.toInstant()
         .atZone(ZoneId.systemDefault())
